@@ -21,9 +21,9 @@ Archivos utilizados (carpeta `data/`):
 | `olist_order_reviews_dataset.csv` | Reseñas: puntuación 1–5 (origen de la variable objetivo) |
 | `olist_customers_dataset.csv` | Clientes: ciudad y estado |
 | `olist_products_dataset.csv` | Productos: categoría, dimensiones, peso y fotos |
+| `olist_sellers_dataset.csv` | Vendedores: ciudad y estado (para comparar ubicación cliente-vendedor) |
 
-Descartados: `olist_geolocation_dataset.csv`, `olist_sellers_dataset.csv` y
-`product_category_name_translation.csv`.
+Descartados: `olist_geolocation_dataset.csv` y `product_category_name_translation.csv`.
 
 ## Estructura
 - `data/` — CSV originales · `data/procesado/` — salidas de los notebooks (no se suben)
