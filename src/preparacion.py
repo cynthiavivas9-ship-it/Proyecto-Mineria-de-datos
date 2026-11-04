@@ -52,6 +52,23 @@ def traducir(dfs):
     return dfs
 
 
+def dif_dias(df, fin, inicio):
+    """Diferencia entre dos columnas de fecha de `df`, en días (con decimales)."""
+    return (df[fin] - df[inicio]).dt.total_seconds() / 86400
+
+
+def tasa_insatisfaccion(df, columna, etiquetas=None):
+    """Tabla con cantidad de pedidos, % de pedidos y % de insatisfechos según `columna`."""
+    t = (df.groupby(columna)['insatisfecho']
+           .agg(['size', 'mean'])
+           .rename(columns={'size': 'cantidad de pedidos', 'mean': '% insatisfechos'}))
+    if etiquetas:
+        t = t.rename(index=etiquetas)
+    t['% de pedidos'] = (t['cantidad de pedidos'] / t['cantidad de pedidos'].sum() * 100).round(1)
+    t['% insatisfechos'] = (t['% insatisfechos'] * 100).round(1)
+    return t[['cantidad de pedidos', '% de pedidos', '% insatisfechos']]
+
+
 def historial_vendedor(g):
     """Historial de un vendedor para cada uno de sus pedidos,
     usando solo eventos ocurridos ANTES de la fecha de compra (sin fuga de información)."""
@@ -76,8 +93,8 @@ def historial_vendedor(g):
 
 
 # Fechas de la base consolidada (para leerla desde otros notebooks)
-FECHAS_BASE = FECHAS['orders'] + ['fecha_limite_despacho', 'review_answer_timestamp',
-                                  'momento_prediccion', 'despacho_observado']
+FECHAS_BASE = FECHAS['orders'] + ['fecha_limite_despacho', 'review_creation_date',
+                                  'review_answer_timestamp', 'momento_prediccion', 'despacho_observado']
 
 
 def leer_base(ruta_archivo):
