@@ -98,5 +98,10 @@ FECHAS_BASE = FECHAS['orders'] + ['fecha_limite_despacho', 'review_creation_date
 
 
 def leer_base(ruta_archivo):
-    """Lee base_consolidada.csv con las fechas convertidas."""
-    return pd.read_csv(ruta_archivo, parse_dates=FECHAS_BASE)
+    """Lee base_consolidada.csv y convierte las columnas de fecha.
+    Se usa format='mixed' porque al guardar el CSV algunas fechas quedan como
+    '2017-09-23' y otras como '2017-09-23 00:00:00'."""
+    df = pd.read_csv(ruta_archivo)
+    for col in FECHAS_BASE:
+        df[col] = pd.to_datetime(df[col], format='mixed')
+    return df

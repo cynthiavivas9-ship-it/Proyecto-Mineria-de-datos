@@ -8,3 +8,5 @@ xgboost
 lightgbm
 jupyter
 ipykernel
+plotly
+kaleido
