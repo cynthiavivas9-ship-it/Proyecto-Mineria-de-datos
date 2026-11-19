@@ -52,6 +52,25 @@ def traducir(dfs):
     return dfs
 
 
+def guardar_traducidas(dfs, ruta):
+    """Guarda las 7 tablas ya traducidas (una por CSV) para que las lea el notebook 02."""
+    os.makedirs(ruta, exist_ok=True)
+    for nombre, df in dfs.items():
+        df.to_csv(os.path.join(ruta, f'{nombre}_traducida.csv'), index=False)
+
+
+def cargar_traducidas(ruta):
+    """Lee las tablas guardadas por `guardar_traducidas`, con fechas y códigos postales bien tipados.
+    Se usa format='mixed' porque al guardar el CSV algunas fechas quedan sin la hora."""
+    dfs = {}
+    for nombre in ARCHIVOS:
+        df = pd.read_csv(os.path.join(ruta, f'{nombre}_traducida.csv'), dtype=TEXTO)
+        for col in FECHAS.get(nombre, []):
+            df[col] = pd.to_datetime(df[col], format='mixed')
+        dfs[nombre] = df
+    return dfs
+
+
 def dif_dias(df, fin, inicio):
     """Diferencia entre dos columnas de fecha de `df`, en días (con decimales)."""
     return (df[fin] - df[inicio]).dt.total_seconds() / 86400
